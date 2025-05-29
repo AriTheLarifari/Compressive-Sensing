@@ -92,7 +92,10 @@ bemstyle/.style={skin=enhanced, parbox=false,boxrule=0.15mm,leftrule=0.5mm,right
 \title{Basis pursuit II}
 \newcommand{\email}{email}
 \newcommand{\CC}{\mathbb{C}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\KK}{\mathbb{K}}
 \renewcommand{\emph}{\textbf}
+\newcommand{\pp}{\partial}
 %\setbeamercovered{transparent} 
 \setbeamertemplate{navigation symbols}{} 
 
@@ -218,7 +221,7 @@ In this chapter we also want to handle noise in the measurement in addition to a
     A matrix \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) if and only if 
     \begin{align*}
     &\forall x,z\in \CC^N:\\ &\|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_S\|)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.
-    \end{align}
+    \end{align*}
     \end{Satzz}
     This is a generalisation of the previously discussed theorem for the SNSP.
 
