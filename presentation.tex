@@ -134,16 +134,64 @@ bemstyle/.style={skin=enhanced, parbox=false,boxrule=0.15mm,leftrule=0.5mm,right
 \tableofcontents 
 \end{frame}
 
+\begin{frame}{Review Exact Reconstruction}
+\begin{itemize}
+	\item For \(A\in \KK^{m\times N}\) and \(s\in \NN\) we have that
+	\begin{align*}
+	\left.\begin{array}{c}
+		\forall x\in \CC^N\,s\text{-sparse}:\\
+		x\text{ is the unique minimizer} \\  \text{of }
+		\left\{\|z\|_1\,\big|\, Az=Ax\right\}
+	\end{array}\right\}
+\iff  A\text{ satisfies the NSP of order }s.
+\end{align*}
+\item Also, 
+\[\left.\begin{array}{c}
+		\forall x\in \CC^N\,s\text{-sparse}:\\
+		x\text{ is the unique minimizer} \\  \text{of }
+		\left\{\|z\|_1\,\big|\, Az=Ax\right\}
+	\end{array}\right\} \iff \left\{\begin{array}{c}
+		\forall x\in \CC^N\,s\text{-sparse}:\\
+		\arg\min\left\{\|z\|_1\,\big|\,Az=Ax\right\}\\
+		=\arg\min\left\{\|z\|_0\,\big|\,Az=Ax\right\}
+	\end{array}\right.
+
+\]
+\textcolor{red}{Stimmt die Rueckrichtung auch?}
+Hence, the NSP of order \(s\) is a necessary and sufficient condition for the exact reconstruction of every \(s\)-sparse vector via the basis pursuit.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Review Stability}
+	\begin{itemize}
+		\item The basis pursuit is stable under a sparsity defect in the vector \(x\), if the measurement matrix satisfies the stable null space property (SNSP).
+		\item For a matrix \(A\in\CC^{m\times N}\), we have
+\[\left.\begin{array}{c}
+\forall x,z\in \CC^N:\\
+\|z-x\|_1\le \frac{1+\rho}{1-\rho}\left(\|z\|_1-\|x\|_1+2\|x_{\overline{S}}\|_1\right)
+\end{array}\right\}
+\iff 
+\begin{array}{c}
+A\text{ satisfies}\\
+\text{SNSP}(\rho,S)
+\end{array}
+\,.\]
+\item In particular, if \(A\) satisfies the SNSP($\rho,S$), any minimizer \(x^{\#}\) of \(\left\{\|z\|_1\,\big|\,Ax=Az\right\}\) satisfies 
+\[\|x-x^{\#}\|_1\le \frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1\,.\]
+	\end{itemize}
+\end{frame}
+
 \section{Robustness}
 
 \begin{frame}{Robustness}
- How do we handle noise in the measurements in the basis pursuit? I.e. what additional assumptions do we need to obtain similar results, if we consider the problem
+In this chapter we also want to handle noise in the measurement in addition to a sparsity deficit of the data.\\
+ What additional assumptions do we need to obtain similar results, if we consider the problem
  \[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-y\|\le \eta\right\}\,?\tag{$P_{1,\eta}$}\]
- It depends on the norm, in which we measure the noise, i.e. the norm of \(\|Az-y\|\).
+ It depends on the norm, in which we measure the error, i.e. the distance of TODO
 \end{frame}
 
 
-\begin{frame}{Robust null space property}
+\begin{frame}{}
 
     At first, we consider the situation where we measure the noise in the \(\ell^1\)-norm, i.e. \(\|Az-y\|=\|Az-y\|_1\).
     \begin{Def}
@@ -151,101 +199,92 @@ bemstyle/.style={skin=enhanced, parbox=false,boxrule=0.15mm,leftrule=0.5mm,right
     \[\forall v\in \CC^N:\;\; \|v_S\|_1\le \rho\|v_{\overline S}\|_1+\tau \|Av\|\,.\tag{RNSP($\|\cdot\|,\rho,\tau,S$)}\]
     \(A \) satisfies the robust null space property of \emph{order} \(s\) with respect to \(\|\cdot\|\) with the constants \(\rho\in (0,1)\) and \(\tau>0\) RNSP(\(\|\cdot\|,\rho,\tau, s\)) iff \(A \) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) for all sets \(S\subseteq[N]\) with \(|S|\le s\).
     \end{Def}
+    \textcolor{red}{Intuition for the null space property? Is it a common property or rather rare? Is it true, that it is relatively hard to verify?}
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item Maybe the content of this slide is just done on the board.
+		\item Note that RNSP($\|\cdot\|,\rho,0,S$)$\iff$SNSP($\rho,S$) for all \(\|\cdot\|\), \(\rho\) and \(S\).
+		\item Furthermore, RNSP($\|\cdot\|,\rho,\tau,S$)$\implies$ SNSP($\rho,S$) for all \(\|\cdot\|\), \(\rho\), \(\tau\) and \(S\).
+\item Hence, all statements are in particular statements on SNSP
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{}
-    Motivation dafür: TODO
+    The main result is the following theorem.
     \begin{Satzz}
-    {Characterization of RNSP}{}
+    {}{}
     A matrix \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) if and only if 
-    \[\forall x,z\in \CC^N:\;\; \|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_S\|)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.\]
+    \begin{align*}
+    &\forall x,z\in \CC^N:\\ &\|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_S\|)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.
+    \end{align}
     \end{Satzz}
+    This is a generalisation of the previously discussed theorem for the SNSP.
 
 \end{frame}
 
 \begin{frame}{}
+Before proving this theorem, note the following corollary.
     \begin{Kor}
         {}{}
         Assume that \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,s\)) with \(0<\rho<1\) and \(\tau>0\) and let \(x\in \CC^N\). Then, if
-        \[\mathcal L_x:=\left\{x^{\#}\in\CC^N\,\big|\, \|x^{\#}\|_1=\min\{\|z_1\|\,|\,\|Ax-Az\|\le \eta\}\right\}\]
+        \[\mathcal L_{x,\eta}:
+        =\pp B_{\min\{\|z_1\|\,|\,\|Ax-Az\|\le \eta\}}^{\|\cdot\|_1}(0)\cap A^{-1}(Ax)
+        \]
         is the solution set of the problem ($P_{1,\eta}$) with \(y=Ax\), then 
         \[\sup_{x^{\#}\in \mathcal L_x}\|x-x^{\#}\|_1\le \frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1+\frac{4\tau}{1-\rho}\eta\,,\]
         i.e. the solution set \(\mathcal L_x\) is contained in a ball of radius \(\frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1+\frac{4\tau}{1-\rho}\eta\) around \(x\) in the \(\ell^1\)-norm.
     \end{Kor}
+    \textcolor{red}{Macht es Sinn, dazu ein Bild zu malen?}
 \end{frame}
 
-\begin{frame}{Tabelas}
-    A Tabela mostra um modelo de tabela.
-
-    \begin{table}[htb]
-        \caption{Exemplo de tabela}
-        \label{tab:modelo_tabela}
-        \centering
-        \begin{tabular}{c|c|c|c}
-	        \hline
-	        \textbf{Pessoa} & \textbf{Idade} & \textbf{Peso} & \textbf{Altura} \\ \hline
-	        Marcos & 26    & 68   & 178    \\ \hline
-	        Ivone  & 22    & 57   & 162    \\ \hline
-	        Sueli  & 40    & 65   & 153    \\ \hline
-        \end{tabular}
-        
-        \medskip
-        
-        Fonte: Produção do próprio autor.
-    \end{table}
-\end{frame}
-
-\begin{frame}{Imagens}
-    A Figura mostra a logomarca promocional da Universidade Federal do Espírito Santo (UFES).
-    
-    \begin{figure}[htb]
-        \caption{Logomarca Promocional UFES}
-        \label{fig:logo_UFES}
-        \centering
-        %\includegraphics[width=0.5\textwidth]{imagens/logomarca_UFES}
-        
-        \medskip
-        
-        Fonte: Produção do próprio autor.
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Conclusão}
-    Texto referente à conclusão.
-\end{frame}
-
-\begin{frame}{Trabalhos futuros}
+\begin{frame}{}
     \begin{itemize}
-        \item Estudar $\ldots$
-        
-        \medskip
-        
-        \item Explorar $\ldots$
-        
-        \medskip
-        
-        \item Analisar $\ldots$
+    	\item The content of this slide might be done only on the board.
+    	\item Explanation why the corollary follows from the theorem.
+    	\item Proof of the theorem (maybe shifted to the second part of the presentation, since similar to last time).
     \end{itemize}
 \end{frame}
 
-\section{Referências}
-\begin{frame}[allowframebreaks]{Referências}
-    \bibliography{referencias}
+\begin{frame}{}
+\begin{itemize}
+	\item Since \(\|\cdot\|_p\le \|\cdot\|_q\) for \(p\le q\), it is harder to bound the \(\ell^q\)-error from above than the \(\ell^p\) error for \(p\le q\). 
+	\item  Of course, the norms are equivalent, but the constant for the other direction depends on the dimension, which we assume is large.
+	\item But if we assume an adapted, stronger version of the RNSP, we get a useful bound for the error.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+ \begin{Def}
+ {$\ell^q$-robust null space property}{}
+ Let \(q\ge 1\). A matrix \(A\in \CC^{m\times N}\) satisfies the \emph{$\ell^q$-robust null space property} of \emph{order} \(s\in \NN\) (with respect to \(\|\cdot\|\)) with the constants \(\rho\\in (0,1)\) and \(\tau\ge0\) iff
+ \[TODO\]
+ \textcolor{red}{Warum tau echt groesser 0?}
+ \end{Def}
+ \end{frame}
+
+\section{Recovery of individual vectors}
+\begin{frame}{Recoverz of individual vectors}
+    So far, our problem was to reconstruct \(x\) from the information what \(Ax\) is and that \(x\) is sparse (or knowing the support of \(x\)). We saw that the convex relaxation of the corresponding minimization problem reconstructs the minimizer iff the null space property holds for \(A\). What, if we have additional a priori information on \(x\)? Maybe then there is a way to solve it in an acceptable computational complexity? But this is not discussed here, we still consider the convex relaxation, but now assume conditions on \(A\) and \(x\). \textcolor{red}{What does finer mean?}
 \end{frame}
 
 \begin{frame}
 
-\begin{center}
-    Obrigado!
-    
-    \email
-\end{center}
 
-\begin{figure}[htb]
-    \centering
-    %\includegraphics[width=0.5\textwidth]{imagens/logomarca_UFES}
-\end{figure}
+\begin{itemize}
+	\item As we will see, there is a difference between the real and complex case.
+	\item Some other remarks.
+\end{itemize}
 
+\end{frame}
+
+\begin{frame}
+	\begin{Satzz}
+		{}{} TODO
+	\end{Satzz}
+	
+	\textcolor{red}{Gibt es eine Relation zwischen den Bedingungen in diesem Satz und der NSP?  Weil diese condition fuer alle x muss ja die NSP implizieren, weil die ja aequivalent ist zu der exact reconstruction.}
 \end{frame}
 
 \end{document}
