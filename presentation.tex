@@ -96,6 +96,13 @@ bemstyle/.style={skin=enhanced, parbox=false,boxrule=0.15mm,leftrule=0.5mm,right
 \newcommand{\KK}{\mathbb{K}}
 \renewcommand{\emph}{\textbf}
 \newcommand{\pp}{\partial}
+\newcommand{\sgn}{\text{sgn}}
+\newcommand{\p}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\supp}{\text{supp}}
+\newcommand{\I}{\mathrm{i}}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\RR}{\mathbb R}
+\newcommand{\cone}{\mathrm{cone}}
 %\setbeamercovered{transparent} 
 \setbeamertemplate{navigation symbols}{} 
 
@@ -158,7 +165,6 @@ bemstyle/.style={skin=enhanced, parbox=false,boxrule=0.15mm,leftrule=0.5mm,right
 		\arg\min\left\{\|z\|_1\,\big|\,Az=Ax\right\}\\
 		=\arg\min\left\{\|z\|_0\,\big|\,Az=Ax\right\}
 	\end{array}\right.
-
 \]
 \textcolor{red}{Stimmt die Rueckrichtung auch?}
 Hence, the NSP of order \(s\) is a necessary and sufficient condition for the exact reconstruction of every \(s\)-sparse vector via the basis pursuit.
@@ -273,8 +279,6 @@ Before proving this theorem, note the following corollary.
 \end{frame}
 
 \begin{frame}
-
-
 \begin{itemize}
 	\item As we will see, there is a difference between the real and complex case.
 	\item Some other remarks.
@@ -284,10 +288,153 @@ Before proving this theorem, note the following corollary.
 
 \begin{frame}
 	\begin{Satzz}
-		{}{} TODO
+		{}{} Let \(A\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. Then, the following conditions are equivalent:
+		\begin{itemize}
+			\item[(i)] \(\forall v\in \ker(A)\setminus\{0\}:\;\;|\p{v}{\sgn(x)}|< \|v_{\overline S}\|_1\).
+			\item[(ii)] \(A_S\) is injective and 
+			\[\exists h\in \CC^m:\;\;\left\{\begin{array}{cl}
+				(A^*h)_j=\sgn(x_j),&j\in S\;\;\;\text{i.e. }A^*_Sh=\sgn(x_S)\\
+				(A^*h)_j<1,&j\in \overline S
+			\end{array}\right.\,.\]
+			\end{itemize}
+			If one (and hence both) of these conditions hold, then \(x\) is the unique minimizer of the problem
+			\[\min\left\{\|z\|_1\,\big|\,Az=Ax\right\}\,.\]
 	\end{Satzz}
 	
-	\textcolor{red}{Gibt es eine Relation zwischen den Bedingungen in diesem Satz und der NSP?  Weil diese condition fuer alle x muss ja die NSP implizieren, weil die ja aequivalent ist zu der exact reconstruction.}
+\end{frame}
+
+\begin{frame}{Remarks}
+	\begin{itemize}
+		\item \(A\text{ satisfies the NSP relative }S\iff \forall x\in \CC^N \text{ with }\supp(x)\subseteq S:\text{ (a) holds}.\)
+		\item If (a) holds for \(x\in \CC^N \) with \(\supp(x)\subseteq S\), (a) also holds for all 
+		\[\{x'\in \CC^N\,|\, \supp (x') \subseteq S\text{ and }\sgn(x)_{\supp(x')}=\sgn(x')_{\supp(x')}\}\,.\]
+		\item There are stable and robust versions of this theorem, which yield slightly weaker error bounds than of the previous theorems.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\begin{itemize}
+		\item If \(A_S \) is injective, then \(A_S^*A_S\) is invertible.
+		\item Furthermore, the Moore-Penrose pseudo-inverse of \(A_S\) is then a left-inverse of \(A_S\) and given by
+		\[A_S^{\dagger}=(A_S^*A_S)^{-1}A_S^*\,.\]
+		\item Therefore the condition \(A^*_Sh=\sgn(x_S)\) is satisfied by \(h:=(A_S^{\dagger})^*\sgn(x_S)\).
+		\item Hence, if this choice of \(h\) also satisfies the rest of (b), then the Theorem holds:
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+		\begin{Kor}
+			{}{}Let \(A=(a_1,\ldots,a_N)\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. If \(A_S\) is injective and if 
+			\begin{align*}
+			\forall l\in \overline S:\;\;&\left|\p{A_S^{\dagger}a_l}{\sgn(x_S)}\right|=\left|\p{a_l}{(A_S^{\dagger})^*\sgn(x_S)}\right|\\
+			&=\left(A^*(A_S^{\dagger})^*\sgn(x_S)\right)_l<1\,,
+			\end{align*}
+			then \(x\) is the unique minimizer of the problem
+			\[\min\left\{\|z\|_1\,\big|\,Az=Ax\right\}\,.\]
+		\end{Kor}
+
+\end{frame}
+
+\begin{frame}{The converse direction}
+	 The converse of the Theorem 4.26 is not true in general, e.g. take 
+		\[ A=\begin{pmatrix}1&0&-1\\0&1&-1\end{pmatrix}, \;\;x=\begin{pmatrix}\e^{-\pi \I/3}\\\e^{\pi \I/3}\\0\end{pmatrix}\,.\]
+		The solution space of $Az=Ax$ is then 
+		\[\left\{\begin{pmatrix}
+		0\\\sqrt 3 \I\\-\e^{-\I \pi/3}
+		\end{pmatrix}+z\begin{pmatrix}
+		1\\1\\1
+		\end{pmatrix}\,\bigg|\, z\in \CC\right\}\,,\]
+		and hence, the minimization problem consists in finding the point \(z\in \CC\) such that the sum of the distances to the points \(z_1=0\), \(z_2=-\sqrt 3\I\), \(z_3=\e^{-\I \pi/3}\) is minimal.
+\end{frame}
+
+\begin{frame}
+	\begin{minipage}{0.35\linewidth}
+	\begin{tikzpicture}[scale=1.5]
+		\draw[->] (-1,0) -- (1,0) ;
+		\draw[->] (0,-2) -- (0,1) ;
+		\draw[blue] (0.5,-0.866)node[right, red]{$z_3$}--(0,-sqrt 3);
+		\draw[blue] (0.5,-0.866)--(0,0)node[above left,black]{$z_1$};
+		\draw[blue] (0,-sqrt 3)node[left, black]{$z_2$}--(0,0);
+		\fill (0,0) circle (1.5pt);
+		\fill (0,-sqrt 3) circle (1.5pt);
+		\fill[red] (0.5,-0.866) circle (1.5pt);
+	\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{0.55\textwidth}
+	In the picture one can see that the sum of the distances is minimal exactly for \(z=z_3\) (cf. first Fermat point, the angle at \(z_3\) is \(120^{\circ}\)). Hence, \(x=(0,\sqrt{3}\I, \e^{-\I\pi/3})^T+z_3(1,1,1)^T\) is the unique minimizer of the problem.
+\end{minipage}
+\vspace{0.5cm}\\
+However, the condition (a) does not hold: For \(v=(z,z,z)\in \ker(A)\setminus\{0\}\), we have that
+\[|\p{\sgn(x)}{v_{\{1,2\}}}|=|\e^{\pi \I/3}z+\e^{-\pi \I/3}z|=|z|=\|v_{\{3\}}\|_1\,.\]
+\end{frame}
+
+\begin{frame}
+	In the real case, however, the converse does actually hold:
+	\begin{Satzz}
+		{}{}
+		 Let \(A\in\RR^{m\times N}\) and \(x\in\RR^N\) with support \(S\subseteq[N]\) be given. Then, the following conditions are equivalent:
+		\begin{itemize}
+			\item[(i)] \(\forall v\in \ker(A)\setminus\{0\}:\;\;|\p{v}{\sgn(x)}|< \|v_{\overline S}\|_1\).
+			\item[(ii)] \(A_S\) is injective and 
+			\[\exists h\in \RR^m:\;\;\left\{\begin{array}{cl}
+				(A^*h)_j=\sgn(x_j),&j\in S\\
+				(A^*h)_j<1,&j\in \overline S
+			\end{array}\right.\,.\]
+			\item[(iii)] \(x \) is the unique minimizer of
+			\[\min\left\{\|z\|_1\,\big|\,z\in \RR^N,\;Az=Ax\right\}\,.\]
+		\end{itemize}
+	\end{Satzz}
+\end{frame}
+
+\begin{frame}{}
+	%Another way to characterize the exact reconstruction of \(x\) via the basis pursuit involves the following definition:
+	\begin{Def}
+		{}{} Let \(x\in \RR^N \), then the \emph{tangent cone} to the \(\ell^1\)-ball at \(x\) is defined as
+		\[T(x)=\mathrm{cone}\left\{z-x\,|\, z\in \RR^N,\;\|z\|_1\le \|x\|_1=\cone(\overline{B_{\|x\|_1}^{\|\cdot\|_1}(x)})\right\}\,.\]
+	\end{Def}
+	\vspace{0.5cm}
+	\begin{minipage}{0.45\linewidth}
+		\centering
+	\begin{tikzpicture}[scale=0.5]
+		\begin{scope}
+			\clip (0,-1) circle (4);
+		\fill(0,0) circle (1.5pt);
+		\path (0,0) node [below]{$x$};
+		\fill[opacity=0.1](1,0)--(0,1)--(-1,0)--(0,-1)--cycle;
+		\fill (0,-1) circle (1.5pt);
+		\path (0,-1) node [below]{$0$};
+		\fill[opacity=0.2] (0,-1)--(4,3)--(0,4)--(-4,3)--cycle;
+		\end{scope}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{0.45\linewidth}
+		\centering
+	\begin{tikzpicture}[scale=0.5]
+		\begin{scope}
+			\clip (0,-1) circle (4);
+		\fill(0,0) circle (1.5pt);
+		\path (0,0) node [below]{$x$};
+		\fill[opacity=0.1](1,0)--(0,1)--(-1,0)--(0,-1)--cycle;
+		\fill (-0.75,-0.25) circle (1.5pt);
+		\path (-0.75,-0.25) node [below]{$0$};
+		\fill[opacity=0.2] (-4,3)--(4,-5)--(8,-1)--(0,7)--cycle;
+		\end{scope}
+		\end{tikzpicture}
+	\end{minipage}
+
+\end{frame}
+
+\begin{frame}
+\begin{Satzz}
+	{}{} Let \(A\in \RR^{m\times N }\) and \(x\in \RR^N \). Then
+	\[
+	\left.\begin{array}{c}
+
+		x\text{ is the unique minimizer} \\  \text{of }
+		\left\{\|z\|_1\,\big|\, Az=Ax\right\}
+	\end{array}\right\} \iff \ker(A)\cap T(x)=\{0\}\,.
+	\]
+\end{Satzz}
 \end{frame}
 
 \end{document}
