@@ -160,14 +160,13 @@ bemstyle/.style={skin=enhanced, parbox=false,boxrule=0.15mm,leftrule=0.5mm,right
 		\forall x\in \CC^N\,s\text{-sparse}:\\
 		x\text{ is the unique minimizer} \\  \text{of }
 		\left\{\|z\|_1\,\big|\, Az=Ax\right\}
-	\end{array}\right\} \iff \left\{\begin{array}{c}
+	\end{array}\right\} \implies \left\{\begin{array}{c}
 		\forall x\in \CC^N\,s\text{-sparse}:\\
 		\arg\min\left\{\|z\|_1\,\big|\,Az=Ax\right\}\\
 		=\arg\min\left\{\|z\|_0\,\big|\,Az=Ax\right\}
 	\end{array}\right.
 \]
-\textcolor{red}{Stimmt die Rueckrichtung auch?}
-Hence, the NSP of order \(s\) is a necessary and sufficient condition for the exact reconstruction of every \(s\)-sparse vector via the basis pursuit.
+
 \end{itemize}
 \end{frame}
 
@@ -195,103 +194,147 @@ A\text{ satisfies}\\
 \begin{frame}{Robustness}
 In this chapter we also want to handle noise in the measurement in addition to a sparsity deficit of the data.\\
  What additional assumptions do we need to obtain similar results, if we consider the problem
- \[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-y\|\le \eta\right\}\,?\tag{$P_{1,\eta}$}\]
- It depends on the norm, in which we measure the error, i.e. the distance of TODO
+ \[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|\le \eta\right\}\tag{$P_{1,\eta}$}\]
+ for \(\|e\|\le \eta\)?
+ It depends on the norm, in which we measure the error, i.e. the distance of a minimizer to \(x\).
 \end{frame}
 
 
 \begin{frame}{}
 
-    At first, we consider the situation where we measure the noise in the \(\ell^1\)-norm, i.e. \(\|Az-y\|=\|Az-y\|_1\).
+    At first, we consider the situation where we measure the error in the \(\ell^1\)-norm.
     \begin{Def}
     {Robust null space property}{} A matrix \(A\in\CC^{m\times N}\) is said to satisfy the \emph{robust null space property} with respect to \(\|\cdot\|\) with the constants \(\rho\in (0,1)\) and \(\tau>0\) relative to a set \(S\subseteq[N]\) iff
     \[\forall v\in \CC^N:\;\; \|v_S\|_1\le \rho\|v_{\overline S}\|_1+\tau \|Av\|\,.\tag{RNSP($\|\cdot\|,\rho,\tau,S$)}\]
     \(A \) satisfies the robust null space property of \emph{order} \(s\) with respect to \(\|\cdot\|\) with the constants \(\rho\in (0,1)\) and \(\tau>0\) RNSP(\(\|\cdot\|,\rho,\tau, s\)) iff \(A \) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) for all sets \(S\subseteq[N]\) with \(|S|\le s\).
     \end{Def}
-    \textcolor{red}{Intuition for the null space property? Is it a common property or rather rare? Is it true, that it is relatively hard to verify?}
 \end{frame}
 
-\begin{frame}
-	\begin{itemize}
-		\item Maybe the content of this slide is just done on the board.
-		\item Note that RNSP($\|\cdot\|,\rho,0,S$)$\iff$SNSP($\rho,S$) for all \(\|\cdot\|\), \(\rho\) and \(S\).
-		\item Furthermore, RNSP($\|\cdot\|,\rho,\tau,S$)$\implies$ SNSP($\rho,S$) for all \(\|\cdot\|\), \(\rho\), \(\tau\) and \(S\).
-\item Hence, all statements are in particular statements on SNSP
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+	%\begin{itemize}
+	%	\item Maybe the content of this slide is just done on the board.
+
+	%	\item Furthermore, RNSP($\|\cdot\|,\rho,\tau,S$)$\implies$ SNSP($\rho,S$) for all \(\|\cdot\|\), \(\rho\), \(\tau\) and \(S\).
+	%\end{itemize}
+%\end{frame}
 
 \begin{frame}{}
     The main result is the following theorem.
     \begin{Satzz}
-    {}{}
+    {(Theorem 4.20 in the book)}{}
     A matrix \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) if and only if 
     \begin{align*}
-    &\forall x,z\in \CC^N:\\ &\|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_S\|)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.
+    &\forall x,z\in \CC^N:\\ &\|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_{\overline S}\|_1)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.
     \end{align*}
     \end{Satzz}
-    This is a generalisation of the previously discussed theorem for the SNSP.
+    This is a generalization of the previously discussed theorem for the SNSP.
 
 \end{frame}
 
 \begin{frame}{}
 Before proving this theorem, note the following corollary.
     \begin{Kor}
-        {}{}
-        Assume that \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,s\)) with \(0<\rho<1\) and \(\tau>0\) and let \(x\in \CC^N\). Then, if
-        \[\mathcal L_{x,\eta}:
-        =\pp B_{\min\{\|z_1\|\,|\,\|Ax-Az\|\le \eta\}}^{\|\cdot\|_1}(0)\cap A^{-1}(Ax)
-        \]
-        is the solution set of the problem ($P_{1,\eta}$) with \(y=Ax\), then 
+        {(Theorem 4.19 in the book)}{}
+        Assume that \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,s\)) with \(0<\rho<1\) and \(\tau>0\), \(e\in\CC^m\) with \(\|e\|\le \eta\) and let \(x\in \CC^N\). Then, if \(\mathcal L_{x,\eta}\) is the set of all minimizers of the problem
+		\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|\le \eta\right\}\,,\]
+    	then 
         \[\sup_{x^{\#}\in \mathcal L_x}\|x-x^{\#}\|_1\le \frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1+\frac{4\tau}{1-\rho}\eta\,,\]
-        i.e. the solution set \(\mathcal L_x\) is contained in a ball of radius \(\frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1+\frac{4\tau}{1-\rho}\eta\) around \(x\) in the \(\ell^1\)-norm.
+        i.e. the solution set \(\mathcal L_x\) is contained in a ball of radius \(\frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1+\frac{4\tau}{1-\rho}\eta\) around \(x\) in the \(\ell^1\)-norm, which is small for small \(\eta\) and small sparsity defect \(\sigma_s(x)_1\).
     \end{Kor}
-    \textcolor{red}{Macht es Sinn, dazu ein Bild zu malen?}
 \end{frame}
 
-\begin{frame}{}
-    \begin{itemize}
-    	\item The content of this slide might be done only on the board.
-    	\item Explanation why the corollary follows from the theorem.
-    	\item Proof of the theorem (maybe shifted to the second part of the presentation, since similar to last time).
-    \end{itemize}
-\end{frame}
+%\begin{frame}{}
+    %\begin{itemize}
+    	%\item The content of this slide might be done only on the board.
+    	%\item Explanation why the corollary follows from the theorem.
+    	%\item Proof of the theorem (maybe shifted to the second part of the presentation, since similar to last time).
+   % \end{itemize}
+%\end{frame}
+
+%\begin{frame}{}
+%\begin{itemize}
+%	\item Since \(\|\cdot\|_p\le \|\cdot\|_q\) for \(p\le q\), it is harder to bound the \(\ell^q\)-error from above than the \(\ell^p\) error for \(p\le q\). 
+%	\item  Of course, the norms are equivalent, but the constant for the other direction depends on the dimension, which we assume is large.
+%	\item But if we assume an adapted, stronger version of the RNSP, we get a useful bound for the error.
+%	\item Proof of \(\|v_S\|_p\le s^{\frac{1}{p}-\frac{1}{q}}\) for \(1\le p\le q\).
+%\end{itemize}
+%\end{frame}
+
 
 \begin{frame}{}
-\begin{itemize}
-	\item Since \(\|\cdot\|_p\le \|\cdot\|_q\) for \(p\le q\), it is harder to bound the \(\ell^q\)-error from above than the \(\ell^p\) error for \(p\le q\). 
-	\item  Of course, the norms are equivalent, but the constant for the other direction depends on the dimension, which we assume is large.
-	\item But if we assume an adapted, stronger version of the RNSP, we get a useful bound for the error.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{}
+	To establish an \(\ell^q \)-bound for the error, we need a slightly stronger version of the RNSP:
  \begin{Def}
  {$\ell^q$-robust null space property}{}
- Let \(q\ge 1\). A matrix \(A\in \CC^{m\times N}\) satisfies the \emph{$\ell^q$-robust null space property} of \emph{order} \(s\in \NN\) (with respect to \(\|\cdot\|\)) with the constants \(\rho\\in (0,1)\) and \(\tau\ge0\) iff
- \[TODO\]
- \textcolor{red}{Warum tau echt groesser 0?}
+ Let \(q\ge 1\). A matrix \(A\in \CC^{m\times N}\) satisfies the \emph{$\ell^q$-robust null space property} of \emph{order} \(s\in \NN\) (with respect to \(\|\cdot\|\)) with the constants \(\rho\in (0,1)\) and \(\tau\ge0\) iff
+ \[\forall S\subseteq N,\;|S|\le s\;\forall v\in \CC^N:\;\;\|v_S\|_q\le \frac{\rho}{s^{1-\frac{1}{q}}}\|v_{\overline S}\|_1+\tau\|Av\|\,.\]
  \end{Def}
  \end{frame}
 
-\section{Recovery of individual vectors}
-\begin{frame}{Recoverz of individual vectors}
-    So far, our problem was to reconstruct \(x\) from the information what \(Ax\) is and that \(x\) is sparse (or knowing the support of \(x\)). We saw that the convex relaxation of the corresponding minimization problem reconstructs the minimizer iff the null space property holds for \(A\). What, if we have additional a priori information on \(x\)? Maybe then there is a way to solve it in an acceptable computational complexity? But this is not discussed here, we still consider the convex relaxation, but now assume conditions on \(A\) and \(x\). \textcolor{red}{What does finer mean?}
-\end{frame}
+ \begin{frame}
+	\begin{itemize}
+		\item For \(v\in \CC^N \) and \(1\le p\le q\), we have 
+		\[\|v_S\|_p\le s^{\frac{1}{p}-\frac{1}{q}}\|v_S\|_q\,.\]
+		\item Hence, 
+		\[
+		\ell^q
+		\text{-RNSP
+		($\|\cdot\|,\rho,\tau,s$)}
+		\implies \ell^p \text{-RNSP($s^{\frac{1}{p}-\frac{1}{q}}\|\cdot\|,\rho,\tau,s$)}\,.
+		\]
+		\item In particular, the previously known \(\ell^1\)-RNSP is implied by the \(\ell^q\)-RNSP for \(1\le q<\infty\).
+	\end{itemize}
+ \end{frame}
 
-\begin{frame}
-\begin{itemize}
-	\item As we will see, there is a difference between the real and complex case.
-	\item Some other remarks.
-\end{itemize}
+ \begin{frame}{Robustness of quadratically constrained basis pursuit}
+	\begin{Kor}
+		{(Theorem 4.22 in the book)}{}
+		Assume \(A\in \CC^{m\times N }\) satisfies \(\ell^2 \)-RNSP($\|\cdot\|_2,\rho,\tau, s$) and let \(x\in \CC^N\), \(e\in \CC^m\) with \(\|e\|\le \eta\). Then, if \(\mathcal L_{x,\eta}\) is the set of all minimizers of the problem
+		\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|_2\le \eta\right\}\,,\]
+		then
+		\[\sup_{x^{\#}\in \mathcal L_{x,\eta}}\|x-x^{\#}\|_p\le \frac{C}{s^{1-\frac{1}{p}}}\sigma_s(x)_1+Ds^{\frac{1}{p}-\frac{1}{2}}\eta\]
+		for \(p\in [1,2]\) and for some constants \(C,D>0\) that only depend on \(\rho\), \(\tau\).
+	\end{Kor}
+ \end{frame}
 
-\end{frame}
+ \begin{frame}{Remarks}
+	\begin{itemize}
+		\item The powers of \(s\) are interpolated between the \(\ell^1\)- and the \(\ell^2\)-case.
+		\item A theorem in section 11 shoes that the same error estimate involving \(\sigma_s(x)_2\) instead of \(\sigma_s(x)_1\) is impossible for \(N\gg m\).
+		\item However, if \(\|x\|\) belongs to a \(\ell^q\)-unit ball with \(q<1\), which are good models for compressible vectors, then we have seen that 
+		\[\sigma_s(x)_p\le s^{\frac{1}{p}-\frac{1}{q}}\,.\]
+		\item Hence, assuming \(\eta=0\), our error bound yields
+		\[\|x-x^{\#}\|_p\le \frac{C}{s^{1-\frac{1}{p}}}\sigma_s(x)_1\le Cs^{\frac{1}{p}-\frac{1}{q}}\,,\]
+		i.e. it decays in \(s \) like \(\sigma_s(x)_p\).
+	\end{itemize}
+ \end{frame}
 
-\begin{frame}
+ \begin{frame}
 	\begin{Satzz}
-		{}{} Let \(A\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. Then, the following conditions are equivalent:
+		{(Theorem 4.25 in the book)}{}If a matrix \(A\in \CC^{m\times N}\) satisfies \(\ell^q\)-RNSP($\|\cdot\|,\rho,\tau,s$) for some \(1\le q<\infty\), \(\rho\in (0,1)\), \(\tau>0\), then
+		\begin{align*}
+			&\forall x,z\in \CC^N,\;\forall p\in [1,q]:\\
+			&\|z-x\|_p\le \frac{C}{s^{1-\frac{1}{p}}}(\|z\|_1-\|x\|_1+2\sigma_s(x)_1)+Ds^{\frac{1}{p}-\frac{1}{q}}\|A(x-z)\|\,,\\
+		\end{align*}
+		where \(C=\frac{(1+\rho)^2}{1-\rho}\) and \(D:=(3+\rho)\tau/(1-\rho)\).
+	\end{Satzz}
+ \end{frame}
+
+\section{Recovery of individual vectors}
+\begin{frame}{Recovery of individual vectors}
+	\begin{itemize}
+		\item So far, we found conditions on \(A \) for the unique reconstruction of \emph{all} vectors \(x\in \CC^N\) with sparsity \(s\) (or with support \(S\subseteq[N]\)).
+		\item Now, we want to find conditions on \(A\) \emph{and} \(x\) such that the unique reconstruction of the \emph{one} vector \(x\in \CC^N\) with sparsity \(s\) (or with support \(S\subseteq[N]\)) is possible.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	In the complex case, we have the following theorem:
+	\begin{Satzz}
+		{(Theorem 4.26 in the book)}{} Let \(A\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. Then, the following conditions are equivalent:
 		\begin{itemize}
-			\item[(i)] \(\forall v\in \ker(A)\setminus\{0\}:\;\;|\p{v}{\sgn(x)}|< \|v_{\overline S}\|_1\).
-			\item[(ii)] \(A_S\) is injective and 
+			\item[(a)] \(\forall v\in \ker(A)\setminus\{0\}:\;\;|\p{v}{\sgn(x)}|< \|v_{\overline S}\|_1\).
+			\item[(b)] \(A_S\) is injective and 
 			\[\exists h\in \CC^m:\;\;\left\{\begin{array}{cl}
 				(A^*h)_j=\sgn(x_j),&j\in S\;\;\;\text{i.e. }A^*_Sh=\sgn(x_S)\\
 				(A^*h)_j<1,&j\in \overline S
@@ -324,7 +367,7 @@ Before proving this theorem, note the following corollary.
 
 \begin{frame}
 		\begin{Kor}
-			{}{}Let \(A=(a_1,\ldots,a_N)\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. If \(A_S\) is injective and if 
+			{(Corollary 4.28 in the book)}{}Let \(A=(a_1,\ldots,a_N)\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. If \(A_S\) is injective and if 
 			\begin{align*}
 			\forall l\in \overline S:\;\;&\left|\p{A_S^{\dagger}a_l}{\sgn(x_S)}\right|=\left|\p{a_l}{(A_S^{\dagger})^*\sgn(x_S)}\right|\\
 			&=\left(A^*(A_S^{\dagger})^*\sgn(x_S)\right)_l<1\,,
@@ -371,7 +414,7 @@ However, the condition (a) does not hold: For \(v=(z,z,z)\in \ker(A)\setminus\{0
 \begin{frame}
 	In the real case, however, the converse does actually hold:
 	\begin{Satzz}
-		{}{}
+		{(Theorem 4.30 in the book)}{}
 		 Let \(A\in\RR^{m\times N}\) and \(x\in\RR^N\) with support \(S\subseteq[N]\) be given. Then, the following conditions are equivalent:
 		\begin{itemize}
 			\item[(i)] \(\forall v\in \ker(A)\setminus\{0\}:\;\;|\p{v}{\sgn(x)}|< \|v_{\overline S}\|_1\).
@@ -390,14 +433,14 @@ However, the condition (a) does not hold: For \(v=(z,z,z)\in \ker(A)\setminus\{0
 	%Another way to characterize the exact reconstruction of \(x\) via the basis pursuit involves the following definition:
 	\begin{Def}
 		{}{} Let \(x\in \RR^N \), then the \emph{tangent cone} to the \(\ell^1\)-ball at \(x\) is defined as
-		\[T(x)=\mathrm{cone}\left\{z-x\,|\, z\in \RR^N,\;\|z\|_1\le \|x\|_1=\cone(\overline{B_{\|x\|_1}^{\|\cdot\|_1}(x)})\right\}\,.\]
+		\[T(x)=\mathrm{cone}\left\{z-x\,|\, z\in \RR^N,\;\|z\|_1\le \|x\|_1\right\}=\cone(\overline{B_{\|x\|_1}^{\|\cdot\|_1}(x)})\,.\]
 	\end{Def}
 	\vspace{0.5cm}
 	\begin{minipage}{0.45\linewidth}
 		\centering
-	\begin{tikzpicture}[scale=0.5]
+	\begin{tikzpicture}[scale=0.6]
 		\begin{scope}
-			\clip (0,-1) circle (4);
+			\clip (0,-1) circle (3);
 		\fill(0,0) circle (1.5pt);
 		\path (0,0) node [below]{$x$};
 		\fill[opacity=0.1](1,0)--(0,1)--(-1,0)--(0,-1)--cycle;
@@ -409,9 +452,9 @@ However, the condition (a) does not hold: For \(v=(z,z,z)\in \ker(A)\setminus\{0
 	\end{minipage}
 	\begin{minipage}{0.45\linewidth}
 		\centering
-	\begin{tikzpicture}[scale=0.5]
+	\begin{tikzpicture}[scale=0.6]
 		\begin{scope}
-			\clip (0,-1) circle (4);
+			\clip (0,-1) circle (3);
 		\fill(0,0) circle (1.5pt);
 		\path (0,0) node [below]{$x$};
 		\fill[opacity=0.1](1,0)--(0,1)--(-1,0)--(0,-1)--cycle;
@@ -426,7 +469,7 @@ However, the condition (a) does not hold: For \(v=(z,z,z)\in \ker(A)\setminus\{0
 
 \begin{frame}
 \begin{Satzz}
-	{}{} Let \(A\in \RR^{m\times N }\) and \(x\in \RR^N \). Then
+	{(Theorem 4.35 in the book)}{} Let \(A\in \RR^{m\times N }\) and \(x\in \RR^N \). Then
 	\[
 	\left.\begin{array}{c}
 
@@ -435,6 +478,17 @@ However, the condition (a) does not hold: For \(v=(z,z,z)\in \ker(A)\setminus\{0
 	\end{array}\right\} \iff \ker(A)\cap T(x)=\{0\}\,.
 	\]
 \end{Satzz}
+\end{frame}
+
+\begin{frame}
+	\begin{Satzz}
+{(Theorem 4.36 in the book)}{} Let \(A\in \RR^{m\times N}\), \(x\in \RR^N\) and \(e\in \RR^m \) such that \(\|e\|_2\le \eta\). Assume
+\[\exists \tau>0:\;\;\inf_{v\in T(x)\cap \pp B_1^{\|\cdot\|_2}}\|Av\|_2\ge \tau\,.\]
+Then, if \(x^{\#}\) is a minimizer of the problem
+\[\min\left\{\|z\|_1\,\big|\,z\in \RR^N,\;\;\|Az-(Ax+e)\|_2\le \eta\right\}\,,\]
+we have that
+\[\|x-x^{\#}\|_2\le \frac{2\eta}{\tau}\,.\]
+	\end{Satzz}	
 \end{frame}
 
 \end{document}
