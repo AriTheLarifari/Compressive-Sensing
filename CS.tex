@@ -77,16 +77,18 @@ More precisely, we want to investigate the following optimization problem, for a
 	\end{Satz*}
 
    The main result is the following corollary of this theorem:
-   \begin{Kor}
+   \begin{Kor*}
 		{Robustness of the quadratically constrained basis pursuit}{}
-		Assume \(A\in \CC^{m\times N }\) satisfies \(\ell^2 \)-RNSP($\|\cdot\|_2,\rho,\tau, s$) and let \(x\in \CC^N\), \(e\in \CC^m\) with \(\|e\|\le \eta\). Then, if \(\mathcal L_{x,\eta}\) is the set of all minimizers of the problem
+		Assume \(A\in \CC^{m\times N }\) satisfies \(\ell^2 \)-RNSP($\|\cdot\|_2,\rho,\tau, s$) and let \(x\in \CC^N\), \(e\in \CC^m\) with \(\|e\|_2\le \eta\). Then, if \(\mathcal L_{x,\eta}\) is the set of all minimizers of the problem
 		\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|_2\le \eta\right\}\,,\]
 		then
 		\[\sup_{x^{\#}\in \mathcal L_{x,\eta}}\|x-x^{\#}\|_p\le \frac{C}{s^{1-\frac{1}{p}}}\sigma_s(x)_1+Ds^{\frac{1}{p}-\frac{1}{2}}\eta\]
-		for \(p\in [1,2]\) and for some constants \(C,D>0\) that only depend on \(\rho\), \(\tau\).
-	\end{Kor} 
-
+		for \(p\in [1,2]\) and for some constants (C,D>0\) that only depend on \(\rho\), \(\tau\).
+	\end{Kor*} 
+In particular, we receive error bounds in the \(\ell^1\)-norm and the \(\ell^2\)-norm. One can also study the behavior of the error term in \(s\), to see that it decays in the same rate as \(\sigma_s(x)_p\), when the noise \(\eta\) is neglected.
 
 \subsection*{4.4  Recovery of individual vectors}
+
+In this section, we will study a slightly different problem, where we find
     
  \end{document} 
