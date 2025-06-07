@@ -1,37 +1,92 @@
 \documentclass[a4paper]{article}
 
-\usepackage{mypckg2}
+\usepackage{mypckg}
 
 \begin{document}
 
-\Titel{Basis pursuit II}{}{}{}
 
-\subsection{4.3 Robustness}
+\section*{Basis Pursuit Part II}
 
-\begin{itemize}
-    \item Taking into account the noise in the measurements.
-    \item \begin{Def}
-    {Robust null space property}{}
-    \end{Def}
-    \item \begin{Satz}
-        {}{}
-        Folgen für (\(P_{1,\eta}\)), wenn \(A \) die robust null space property erfüllt.
-    \end{Satz}
-    \item \begin{Satz}
-        {Equivalent characterization of robust null space property}{}
-    \end{Satz}
-    \item \begin{Def}
-    {\(\ell^q\)-robust null space property}{}
-    \end{Def}
-    \item \begin{Satz}
-        {Robustness of the quadratically constrained basis pursuit algorithm}{}
-    \end{Satz}
-    \item Two remarks
-    \item \begin{Satz}
-    {}{}Generalization of the previous theorem, using the proof of the previous theorem.
-    \end{Satz}
-\end{itemize}
+\subsection*{Review of the null space property and stability}
+The basis pursuit the convex relaxation of the \(\ell^0\)-minimization problem, which is NP-hard in general.
+The null space property (NSP) of order \(s\) is a necessary and sufficient condition for the exact reconstruction of every \(s\)-sparse vector via the basis pursuit. Here, \enquote{exact reconstruction} means that every vector \(x\in\CC^N\) with at most \(s\) non-zero entries is the unique minimizer of the following optimization problem:
+\[
+    \min\left\{\|z\|_1\,|\,
+    Az=Ax\right\}\,.\]
+ Furthermore, one can see that if this is the case, then \(x\) is also the unique minimizer of the corresponding \(\ell^0\)-minimization problem.\\
+ The basis pursuit is stable under a sparsity defect in the vector \(x\), if the measurement matrix satisfies the stable null space property (SNSP).
 
-\subsection{4.4 Recovery of individual vectors}
+\subsection*{4.3  Robustness}
+The goal of this section is to take the noise in the meaasurements into account, additinally to the sparsity defect in the vector \(x\).
+More precisely, we want to investigate the following optimization problem, for a given noise level \(\eta\):
+\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|\le \eta\right\}\tag{$P_{1,\eta}$}\,.\]
+ For that we need to strengthen the assumptions on the measurement matrix \(A\) to satisfy the robust null space property (RNSP), depending on the \(\ell^q\)-norm, in which the error bound is desired. We start with \(q=1\):
+\begin{Def*}
+    {Robust null space property}{} A matrix \(A\in\CC^{m\times N}\) is said to satisfy the \emph{robust null space property} with respect to \(\|\cdot\|\) with the constants \(\rho\in (0,1)\) and \(\tau>0\) relative to a set \(S\subseteq[N]\) iff
+    \[\forall v\in \CC^N:\;\; \|v_S\|_1\le \rho\|v_{\overline S}\|_1+\tau \|Av\|\,.\tag{RNSP($\|\cdot\|,\rho,\tau,S$)}\]
+    \(A \) satisfies the robust null space property of \emph{order} \(s\) with respect to \(\|\cdot\|\) with the constants \(\rho\in (0,1)\) and \(\tau>0\) RNSP(\(\|\cdot\|,\rho,\tau, s\)) iff \(A \) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) for all sets \(S\subseteq[N]\) with \(|S|\le s\).
+    \end{Def*}
+    We note that the RNSP directly implies the SNSP. The main result is the following theorem.
+    \begin{Satz*}
+    {(Theorem 4.20 in the book)}{}
+    A matrix \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) if and only if 
+    \begin{align*}
+    &\forall x,z\in \CC^N:\\ &\|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_{\overline S}\|_1)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.
+    \end{align*}
+    \end{Satz*}
+    This is a generalization of the previously discussed theorem for the SNSP (cf. Theorem 4.14 in the book). The following corollary, an \(\ell^1\)-bound for the error, is a key result:
+    \begin{Kor*}
+        {(Theorem 4.19 in the book)}{}
+        Assume that \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,s\)) with \(0<\rho<1\) and \(\tau>0\), \(e\in\CC^m\) with \(\|e\|\le \eta\) and let \(x\in \CC^N\). Then, if \(\mathcal L_{x,\eta}\) is the set of all minimizers of the problem
+		\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|\le \eta\right\}\,,\]
+    	then 
+        \[\sup_{x^{\#}\in \mathcal L_x}\|x-x^{\#}\|_1\le \frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1+\frac{4\tau}{1-\rho}\eta\,,\]
+        i.e. the solution set \(\mathcal L_x\) is contained in a ball of radius \(\frac{2(1+\rho)}{1-\rho}\sigma_s(x)_1+\frac{4\tau}{1-\rho}\eta\) around \(x\) in the \(\ell^1\)-norm, which is small for small \(\eta\) and small sparsity defect \(\sigma_s(x)_1\).
+    \end{Kor*}
+
+    Now, let us move on to establish an error bound in \(\ell^q\) for \(q\in [1,\infty)\). We need:
+    \begin{Def*}
+ {$\ell^q$-robust null space property}{}
+ Let \(q\ge 1\). A matrix \(A\in \CC^{m\times N}\) satisfies the \emph{$\ell^q$-robust null space property} of \emph{order} \(s\in \NN\) (with respect to \(\|\cdot\|\)) with the constants \(\rho\in (0,1)\) and \(\tau\ge0\) iff
+ \[\forall S\subseteq [N],\;|S|\le s\;\forall v\in \CC^N:\;\;\|v_S\|_q\le \frac{\rho}{s^{1-\frac{1}{q}}}\|v_{\overline S}\|_1+\tau\|Av\|\,.\]
+ \end{Def*}
+ \begin{Bemerkung*}{}{}
+     \begin{itemize}
+		\item For \(v\in \CC^N \), \(S\subset [S]\) with \(|S|\le s\) and \(1\le p\le q\), we have 
+		\[\|v_S\|_p\le s^{\frac{1}{p}-\frac{1}{q}}\|v_S\|_q\,.\]
+		\item Hence, 
+		\[
+		\ell^q
+		\text{-RNSP
+		($\|\cdot\|,\rho,\tau,s$)}
+		\implies \ell^p \text{-RNSP($s^{\frac{1}{p}-\frac{1}{q}}\|\cdot\|,\rho,\tau,s$)}
+		\]
+        for \(1\le p\le q\).
+		\item In particular, the previously known \(\ell^1\)-RNSP is implied by the \(\ell^q\)-RNSP for \(1\le q<\infty\).
+	\end{itemize}
+ \end{Bemerkung*}    
+
+ We have the following result:
+ \begin{Satz*}
+		{(Theorem 4.25 in the book)}{}If a matrix \(A\in \CC^{m\times N}\) satisfies \(\ell^q\)-RNSP($\|\cdot\|,\rho,\tau,s$) for some \(1\le q<\infty\), \(\rho\in (0,1)\), \(\tau>0\), then
+		\begin{align*}
+			&\forall x,z\in \CC^N,\;\forall p\in [1,q]:\\
+			&\|z-x\|_p\le \frac{C}{s^{1-\frac{1}{p}}}(\|z\|_1-\|x\|_1+2\sigma_s(x)_1)+Ds^{\frac{1}{p}-\frac{1}{q}}\|A(x-z)\|\,,\\
+		\end{align*}
+		where \(C=\frac{(1+\rho)^2}{1-\rho}\) and \(D:=(3+\rho)\tau/(1-\rho)\).
+	\end{Satz*}
+
+   The main result is the following corollary of this theorem:
+   \begin{Kor}
+		{Robustness of the quadratically constrained basis pursuit}{}
+		Assume \(A\in \CC^{m\times N }\) satisfies \(\ell^2 \)-RNSP($\|\cdot\|_2,\rho,\tau, s$) and let \(x\in \CC^N\), \(e\in \CC^m\) with \(\|e\|\le \eta\). Then, if \(\mathcal L_{x,\eta}\) is the set of all minimizers of the problem
+		\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|_2\le \eta\right\}\,,\]
+		then
+		\[\sup_{x^{\#}\in \mathcal L_{x,\eta}}\|x-x^{\#}\|_p\le \frac{C}{s^{1-\frac{1}{p}}}\sigma_s(x)_1+Ds^{\frac{1}{p}-\frac{1}{2}}\eta\]
+		for \(p\in [1,2]\) and for some constants \(C,D>0\) that only depend on \(\rho\), \(\tau\).
+	\end{Kor} 
+
+
+\subsection*{4.4  Recovery of individual vectors}
     
  \end{document} 
