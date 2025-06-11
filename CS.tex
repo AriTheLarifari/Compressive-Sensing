@@ -1,9 +1,18 @@
 \documentclass[a4paper]{article}
 
 \usepackage{mypckg}
+\fancypagestyle{ErsteSeite}{%
+	\fancyhf{}%
+	\setlength\headheight{35pt}
+    \fancyhead[R]{\leftmark} %Kopfzeile rechts
+    \fancyhead[L]{Compressive Sensing: Basis Pursuit Part II}
+    \fancyhead[R]{Arianna Rast}
+    \fancyfoot[C]{\thepage}
+    }
+    
+\pagestyle{ErsteSeite}
 
 \begin{document}
-
 
 \section*{Basis Pursuit Part II}
 
@@ -83,12 +92,101 @@ More precisely, we want to investigate the following optimization problem, for a
 		\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|_2\le \eta\right\}\,,\]
 		then
 		\[\sup_{x^{\#}\in \mathcal L_{x,\eta}}\|x-x^{\#}\|_p\le \frac{C}{s^{1-\frac{1}{p}}}\sigma_s(x)_1+Ds^{\frac{1}{p}-\frac{1}{2}}\eta\]
-		for \(p\in [1,2]\) and for some constants (C,D>0\) that only depend on \(\rho\), \(\tau\).
+		for \(p\in [1,2]\) and for some constants \(C,D>0\) that only depend on \(\rho\), \(\tau\).
 	\end{Kor*} 
 In particular, we receive error bounds in the \(\ell^1\)-norm and the \(\ell^2\)-norm. One can also study the behavior of the error term in \(s\), to see that it decays in the same rate as \(\sigma_s(x)_p\), when the noise \(\eta\) is neglected.
 
 \subsection*{4.4  Recovery of individual vectors}
 
-In this section, we will study a slightly different problem, where we find
+In this section, we will study a slightly different problem, where we find conditions on the measurement matrix \(A \) and the vector \(x\) such that the basis pursuit recovers \(x\) from the measurements \(Ax\). The difference to the previous section is that we used to have assumptions uniform in \(x\), which then yield the recovery of \emph{all} \(s\)-sparse vectors \(x\). One example is the following theorem: \begin{Satz*}
+		{(Theorem 4.26 in the book)}{} Let \(A\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. Then, the following conditions are equivalent:
+		\begin{itemize}
+			\item[(a)] \(\forall v\in \ker(A)\setminus\{0\}:\;\;|\p{v}{\sgn(x)}|< \|v_{\overline S}\|_1\).
+			\item[(b)] \(A_S\) is injective and 
+			\[\exists h\in \CC^m:\;\;\left\{\begin{array}{cl}
+				(A^*h)_j=\sgn(x_j),&j\in S\;\;\;\text{i.e. }A^*_Sh=\sgn(x_S)\\
+				(A^*h)_j<1,&j\in \overline S
+			\end{array}\right.\,.\]
+			\end{itemize}
+			If one (and hence both) of these conditions hold, then \(x\) is the unique minimizer of the problem
+			\[\min\left\{\|z\|_1\,\big|\,Az=Ax\right\}\,.\]
+	\end{Satz*}
+
+    We see that the condition (a) is related to the NSP in the following way: 
+    \[NSP\text{ relative }S\iff \forall x\in \CC^N\te{with }\supp x\subseteq S:\;\;(a)\,.\]
+    Condition (b) can be used for the following corollary:
+
+    \begin{Kor*}
+			{(Corollary 4.28 in the book)}{}Let \(A=(a_1,\ldots,a_N)\in\CC^{m\times N}\) and \(x\in\CC^N\) with support \(S\subseteq[N]\) be given. Denote \(A_S^{\dagger}=(A^*_SA_S)^{-1}A^*_S\) the left-inverse of \(A_S\). If \(A_S\) is injective and if 
+			\begin{align*}
+			\forall l\in \overline S:\;\;&\left|\p{A_S^{\dagger}a_l}{\sgn(x_S)}\right|=\left|\p{a_l}{(A_S^{\dagger})^*\sgn(x_S)}\right|\\
+			&=\left(A^*(A_S^{\dagger})^*\sgn(x_S)\right)_l<1\,,
+			\end{align*}
+			then \(x\) is the unique minimizer of the problem
+			\[\min\left\{\|z\|_1\,\big|\,Az=Ax\right\}\,.\]
+		\end{Kor*}
+
+        The converse this Theorem does not hold in general, as one can see in the following example:
+        \[ A=\begin{pmatrix}1&0&-1\\0&1&-1\end{pmatrix}, \;\;x=\begin{pmatrix}\e^{-\pi \I/3}\\\e^{\pi \I/3}\\0\end{pmatrix}\,.\]
+		However, if we consider the real problem, the converse does actually hold. The reason for this difference between the complex and the real case is that in the real case, the sign of a vector is a discrete quantity, while in the complex case, it is not.\\
+        Another theorem of this type involves the following definition:
+        \begin{Def*}
+		{}{} Let \(x\in \RR^N \), then the \emph{tangent cone} to the \(\ell^1\)-ball at \(x\) is defined as
+		\[T(x)=\mathrm{cone}\left\{z-x\,|\, z\in \RR^N,\;\|z\|_1\le \|x\|_1\right\}=\mathrm{cone}(\overline{B_{\|x\|_1}^{\|\cdot\|_1}(x)})\,.\]
+	\end{Def*}
+	\vspace{0.5cm}
+    \begin{figure}[]
+	\begin{minipage}{0.45\linewidth}
+	\begin{tikzpicture}[scale=0.8]
+		\begin{scope}
+			\clip (0,-1) circle (3);
+		\fill(0,0) circle (1.5pt);
+		\path (0,0) node [below]{$x$};
+		\fill[opacity=0.1](1,0)--(0,1)--(-1,0)--(0,-1)--cycle;
+		\fill (0,-1) circle (1.5pt);
+		\path (0,-1) node [below]{$0$};
+		\fill[opacity=0.2] (0,-1)--(4,3)--(0,4)--(-4,3)--cycle;
+		\end{scope}
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{0.45\linewidth}
+		\centering
+	\begin{tikzpicture}[scale=0.8]
+		\begin{scope}
+			\clip (0,-1) circle (3);
+		\fill(0,0) circle (1.5pt);
+		\path (0,0) node [below]{$x$};
+		\fill[opacity=0.1](1,0)--(0,1)--(-1,0)--(0,-1)--cycle;
+		\fill (-0.75,-0.25) circle (1.5pt);
+		\path (-0.75,-0.25) node [below]{$0$};
+		\fill[opacity=0.2] (-4,3)--(4,-5)--(8,-1)--(0,7)--cycle;
+		\end{scope}
+		\end{tikzpicture}
+	\end{minipage}
+    \caption{The tangent cone to the \(\ell^1\)-ball in \(\RR^2\) is either a cone with \(90^{\circ}\) (left) or \(180^{\circ}\) (right) opening angle, depending on the position of the point \(0\) in the \(\ell^1\)-ball.}
+\end{figure}
+
+The exact reconstruction of \(x\) is then characterized by:
+\begin{Satz*}
+	{(Theorem 4.35 in the book)}{} Let \(A\in \RR^{m\times N }\) and \(x\in \RR^N \). Then
+	\[
+	\left.\begin{array}{c}
+
+		x\text{ is the unique minimizer} \\  \text{of }
+		\left\{\|z\|_1\,\big|\, Az=Ax\right\}
+	\end{array}\right\} \iff \ker(A)\cap T(x)=\{0\}\,.
+	\]
+\end{Satz*}
+
+Furthermore, this characterization is robust under noise in the measurements in the following sense:
+\begin{Satz*}
+{(Theorem 4.36 in the book)}{} Let \(A\in \RR^{m\times N}\), \(x\in \RR^N\) and \(e\in \RR^m \) such that \(\|e\|_2\le \eta\). Assume
+\[\exists \tau>0:\;\;\inf_{v\in T(x)\cap \pp B_1^{\|\cdot\|_2}}\|Av\|_2\ge \tau\,.\]
+Then, if \(x^{\#}\) is a minimizer of the problem
+\[\min\left\{\|z\|_1\,\big|\,z\in \RR^N,\;\;\|Az-(Ax+e)\|_2\le \eta\right\}\,,\]
+we have that
+\[\|x-x^{\#}\|_2\le \frac{2\eta}{\tau}\,.\]
+	\end{Satz*}	
+
     
  \end{document} 
