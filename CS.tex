@@ -17,7 +17,7 @@
 \section*{Basis Pursuit Part II}
 
 \subsection*{Review of the null space property and stability}
-The basis pursuit the convex relaxation of the \(\ell^0\)-minimization problem, which is NP-hard in general.
+The basis pursuit is the convex relaxation of the previously stated \(\ell^0\)-minimization problem, which is NP-hard in general.
 The null space property (NSP) of order \(s\) is a necessary and sufficient condition for the exact reconstruction of every \(s\)-sparse vector via the basis pursuit. Here, \enquote{exact reconstruction} means that every vector \(x\in\CC^N\) with at most \(s\) non-zero entries is the unique minimizer of the following optimization problem:
 \[
     \min\left\{\|z\|_1\,|\,
@@ -26,9 +26,10 @@ The null space property (NSP) of order \(s\) is a necessary and sufficient condi
  The basis pursuit is stable under a sparsity defect in the vector \(x\), if the measurement matrix satisfies the stable null space property (SNSP).
 
 \subsection*{4.3  Robustness}
-The goal of this section is to take the noise in the meaasurements into account, additinally to the sparsity defect in the vector \(x\).
+The goal of this section is to take the noise in the measurements into account, additionally to the sparsity defect in the vector \(x\).
 More precisely, we want to investigate the following optimization problem, for a given noise level \(\eta\):
-\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|\le \eta\right\}\tag{$P_{1,\eta}$}\,.\]
+\[\min\left\{\|z\|_1\,\big|\,z\in \CC^N,\;\;\|Az-(Ax+e)\|\le \eta\right\}\tag{$P_{1,\eta}$}\,,\]
+where \(e\in \CC^m \) is an error with \(\|e\|\le \eta\).
  For that we need to strengthen the assumptions on the measurement matrix \(A\) to satisfy the robust null space property (RNSP), depending on the \(\ell^q\)-norm, in which the error bound is desired. We start with \(q=1\):
 \begin{Def*}
     {Robust null space property}{} A matrix \(A\in\CC^{m\times N}\) is said to satisfy the \emph{robust null space property} with respect to \(\|\cdot\|\) with the constants \(\rho\in (0,1)\) and \(\tau>0\) relative to a set \(S\subseteq[N]\) iff
@@ -40,7 +41,7 @@ More precisely, we want to investigate the following optimization problem, for a
     {(Theorem 4.20 in the book)}{}
     A matrix \(A\in\CC^{m\times N}\) satisfies RNSP(\(\|\cdot\|,\rho,\tau,S\)) if and only if 
     \begin{align*}
-    &\forall x,z\in \CC^N:\\ &\|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_{\overline S}\|_1)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.
+    &\forall x,z\in \CC^N:\;\;\|z-x\|_1\le \frac{1+\rho}{1-\rho}(\|z\|_1-\|x\|_1+2\|x_{\overline S}\|_1)+\frac{2\tau}{1-\rho}\|A(x-z)\|\,.
     \end{align*}
     \end{Satz*}
     This is a generalization of the previously discussed theorem for the SNSP (cf. Theorem 4.14 in the book). The following corollary, an \(\ell^1\)-bound for the error, is a key result:
@@ -79,8 +80,7 @@ More precisely, we want to investigate the following optimization problem, for a
  \begin{Satz*}
 		{(Theorem 4.25 in the book)}{}If a matrix \(A\in \CC^{m\times N}\) satisfies \(\ell^q\)-RNSP($\|\cdot\|,\rho,\tau,s$) for some \(1\le q<\infty\), \(\rho\in (0,1)\), \(\tau>0\), then
 		\begin{align*}
-			&\forall x,z\in \CC^N,\;\forall p\in [1,q]:\\
-			&\|z-x\|_p\le \frac{C}{s^{1-\frac{1}{p}}}(\|z\|_1-\|x\|_1+2\sigma_s(x)_1)+Ds^{\frac{1}{p}-\frac{1}{q}}\|A(x-z)\|\,,\\
+			&\forall x,z\in \CC^N,\;\forall p\in [1,q]:\;\;\|z-x\|_p\le \frac{C}{s^{1-\frac{1}{p}}}(\|z\|_1-\|x\|_1+2\sigma_s(x)_1)+Ds^{\frac{1}{p}-\frac{1}{q}}\|A(x-z)\|\,,\\
 		\end{align*}
 		where \(C=\frac{(1+\rho)^2}{1-\rho}\) and \(D:=(3+\rho)\tau/(1-\rho)\).
 	\end{Satz*}
@@ -113,7 +113,7 @@ In this section, we will study a slightly different problem, where we find condi
 	\end{Satz*}
 
     We see that the condition (a) is related to the NSP in the following way: 
-    \[NSP\text{ relative }S\iff \forall x\in \CC^N\te{with }\supp x\subseteq S:\;\;(a)\,.\]
+    \[\text{NSP relative }S\iff \forall x\in \CC^N\te{with }\supp x\subseteq S:\;\;(a)\,.\]
     Condition (b) can be used for the following corollary:
 
     \begin{Kor*}
@@ -136,6 +136,7 @@ In this section, we will study a slightly different problem, where we find condi
 	\end{Def*}
 	\vspace{0.5cm}
     \begin{figure}[]
+		\centering
 	\begin{minipage}{0.45\linewidth}
 	\begin{tikzpicture}[scale=0.8]
 		\begin{scope}
